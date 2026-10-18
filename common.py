@@ -1,5 +1,6 @@
 import os,re,html,io,datetime
 from PIL import Image
+import sys;sys.path.insert(0,'/workspace/risk-watcher');from tvv_nav import nav,NAV_CSS
 SRC_CSS=open('/workspace/risk-watcher/site/build.py').read().split('CSS="""')[1].split('"""')[0]
 CSS=SRC_CSS+"""
 figure.g{margin:0 0 28px;padding:0}figure.g figcaption{font-size:15px;margin:4px 6px}figure.g .t{font-weight:700}
@@ -27,7 +28,7 @@ c.querySelectorAll('a[href]').forEach(a=>{const h=a.getAttribute('href');if(!/^(
 catch(e){m.innerHTML='<p>Could not load '+d+'.</p>'}}
 const TT=document.title;tabs.forEach(t=>t.onclick=()=>{location.hash=t.dataset.d});
 addEventListener('hashchange',()=>show(location.hash.slice(1)));show(location.hash.slice(1));"""
-def index(T,tabs,label="Tabs"):
+def index(T,tabs,label="Tabs",cur=None):
     b="".join(f'<button role="tab" data-d="{E(k)}" aria-selected="false">{E(v)}</button>' for k,v in tabs)
-    open("assets/style.css","w").write(CSS); open(".nojekyll","w").write("")
-    open("index.html","w").write(f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{T}</title><link rel="stylesheet" href="assets/style.css"></head><body><div id="top"><header><img src="assets/logo.png" alt="TVV logo"><h1>{T}</h1></header><nav id="tabs" role="tablist" aria-label="{label}">{b}</nav></div><main id="content"></main><script>{JS}</script></body></html>''')
+    open("assets/style.css","w").write(CSS+NAV_CSS); open(".nojekyll","w").write("")
+    open("index.html","w").write(f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{T}</title><link rel="stylesheet" href="assets/style.css"></head><body>{nav(cur)}<div id="top"><header><img src="assets/logo.png" alt="TVV logo"><h1>{T}</h1></header><nav id="tabs" role="tablist" aria-label="{label}">{b}</nav></div><main id="content"></main><script>{JS}</script></body></html>''')

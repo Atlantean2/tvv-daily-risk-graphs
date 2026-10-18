@@ -39,4 +39,4 @@ def render(D,src):
 if __name__=="__main__":
     if len(sys.argv)==3: render(sys.argv[1],sys.argv[2])
     ds=sorted([f[:-5] for f in os.listdir("issues") if re.fullmatch(r"\d{4}-\d{2}-\d{2}\.html",f)],reverse=True)
-    index(T,[(d,datetime.date.fromisoformat(d).strftime("%a %b %-d, %Y")) for d in ds],"Graph dates"); print("tabs:",ds)
+    index(T,[(d,datetime.date.fromisoformat(d).strftime("%a %b %-d, %Y")) for d in ds],"Graph dates",cur="graphs"); print("tabs:",ds)
