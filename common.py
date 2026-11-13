@@ -1,6 +1,6 @@
 import os,re,html,io,datetime
 from PIL import Image
-import sys;sys.path.insert(0,'/workspace/risk-watcher');from tvv_nav import nav,NAV_CSS
+import sys;sys.path.insert(0,'/workspace/risk-watcher');from tvv_nav import nav,NAV_CSS,favicon_links,ensure_favicons
 SRC_CSS=open('/workspace/risk-watcher/site/build.py').read().split('CSS="""')[1].split('"""')[0]
 CSS=SRC_CSS+"""
 figure.g{margin:0 0 28px;padding:0}figure.g figcaption{font-size:15px;margin:4px 6px}figure.g .t{font-weight:700}
@@ -18,7 +18,7 @@ def figure(src,title,caption,urls):
     t=f'<span class="t">{E(title)}.</span> ' if title else ''
     return f'<figure class="g"><img src="{E(src)}" alt="{E(title or caption)}" loading="lazy"><figcaption>{t}{E(caption)}<br><span class="s">Source: {links}</span></figcaption></figure>'
 def page(T,key,body):
-    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{T} — {key}</title><link rel="stylesheet" href="../assets/style.css"><script>if(!/[?&]raw/.test(location.search))location.replace("../index.html#{key}")</script></head><body><main id="issue">{body}</main></body></html>'''
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{T} — {key}</title>{favicon_links("../assets/")}<link rel="stylesheet" href="../assets/style.css"><script>if(!/[?&]raw/.test(location.search))location.replace("../index.html#{key}")</script></head><body><main id="issue">{body}</main></body></html>'''
 JS="""const tabs=[...document.querySelectorAll('#tabs button')],m=document.getElementById('content'),ds=tabs.map(t=>t.dataset.d);
 async function show(d){if(!ds.includes(d))d=ds[0];tabs.forEach(t=>t.setAttribute('aria-selected',t.dataset.d==d));
 document.querySelector(`#tabs [data-d="${d}"]`).scrollIntoView({inline:'nearest',block:'nearest'});
@@ -30,5 +30,6 @@ const TT=document.title;tabs.forEach(t=>t.onclick=()=>{location.hash=t.dataset.d
 addEventListener('hashchange',()=>show(location.hash.slice(1)));show(location.hash.slice(1));"""
 def index(T,tabs,label="Tabs",cur=None):
     b="".join(f'<button role="tab" data-d="{E(k)}" aria-selected="false">{E(v)}</button>' for k,v in tabs)
+    ensure_favicons("assets")
     open("assets/style.css","w").write(CSS+NAV_CSS); open(".nojekyll","w").write("")
-    open("index.html","w").write(f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{T}</title><link rel="stylesheet" href="assets/style.css"></head><body>{nav(cur)}<div id="top"><header><img src="assets/logo.png" alt="TVV logo"><h1>{T}</h1></header><nav id="tabs" role="tablist" aria-label="{label}">{b}</nav></div><main id="content"></main><script>{JS}</script></body></html>''')
+    open("index.html","w").write(f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{T}</title>{favicon_links("assets/")}<link rel="stylesheet" href="assets/style.css"></head><body>{nav(cur)}<div id="top"><header><img src="assets/logo.png" alt="TVV logo"><h1>{T}</h1></header><nav id="tabs" role="tablist" aria-label="{label}">{b}</nav></div><main id="content"></main><script>{JS}</script></body></html>''')
