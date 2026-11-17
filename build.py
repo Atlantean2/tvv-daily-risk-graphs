@@ -6,7 +6,7 @@ CWD0=os.getcwd()
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));os.chdir(os.path.dirname(os.path.abspath(__file__)))
 from common import *
 T="TechVestVentures Daily Risk Graphs"
-SKIP=re.compile(r"AIS|PortWatch|transit",re.I)
+SKIP=re.compile(r"\bAIS\b|PortWatch|transit",re.I)
 def render(D,src):
     src=os.path.abspath(src) if os.path.isabs(src) else os.path.join(CWD0,src)
     od=f"issues/img/{D}";os.makedirs(od,exist_ok=True)
