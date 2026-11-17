@@ -14,6 +14,7 @@ def render(D,src):
     items=[];skipped=[]
     if os.path.isdir(src):
         js=[j for j in glob.glob(f"{src}/Graphs {D}*.json") if "one-per" not in j] or glob.glob(f"{src}/Graphs*.json")
+        js=sorted(js,key=lambda j:(os.path.basename(j)!=f"Graphs {D}.json","picks" in j))
         for g in json.load(open(js[0]))["graphs"]:
             p=os.path.join(src,g["file"])
             if "selftest" in p or SKIP.search(g["file"]+g.get("title","")): skipped.append(g["file"]);continue
